@@ -44,6 +44,11 @@ namespace Nez
 		/// Contains the width and height of the current map.
 		/// </summary>
 		public Vector2 mapSize;
+		
+		/// <summary>
+		/// Contains the offset for the map position
+		/// </summary>
+		public Vector2 mapOffset = new Vector2(0,0);
 
 		Entity _targetEntity;
 		Collider _targetCollider;
@@ -73,6 +78,12 @@ namespace Nez
 
 			// listen for changes in screen size so we can keep our deadzone properly positioned
 			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
+		}
+
+
+		public void shiftMap(Vector2 distance) {
+			mapOffset += distance;
+			camera.position += distance;
 		}
 
 
@@ -112,14 +123,14 @@ namespace Nez
 		/// <param name="position">Position.</param>
 		Vector2 clampToMapSize( Vector2 position )
 		{
-			var halfScreen = new Vector2( camera.bounds.width, camera.bounds.height ) * 0.5f;
-			var cameraMax = new Vector2( mapSize.X - halfScreen.X, mapSize.Y - halfScreen.Y );
+			var halfScreen = mapOffset + new Vector2( camera.bounds.width, camera.bounds.height ) * 0.5f;
+			var cameraMax = mapOffset + new Vector2( mapSize.X - halfScreen.X, mapSize.Y - halfScreen.Y );
 
 			return Vector2.Clamp( position, halfScreen, cameraMax );
 		}
 
 
-        public override void debugRender( Graphics graphics )
+		public override void debugRender( Graphics graphics )
 		{
 			if( _cameraStyle == CameraStyle.LockOn )
 				graphics.batcher.drawHollowRect( _worldSpaceDeadzone.x - 5, _worldSpaceDeadzone.y - 5, _worldSpaceDeadzone.width, _worldSpaceDeadzone.height, Color.DarkRed );
