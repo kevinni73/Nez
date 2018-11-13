@@ -124,7 +124,7 @@ namespace Nez
 		Vector2 clampToMapSize( Vector2 position )
 		{
 			var halfScreen = mapOffset + new Vector2( camera.bounds.width, camera.bounds.height ) * 0.5f;
-			var cameraMax = mapOffset + new Vector2( mapSize.X - halfScreen.X, mapSize.Y - halfScreen.Y );
+			var cameraMax = mapOffset + new Vector2( mapOffset.X + mapSize.X - halfScreen.X, mapOffset.Y + mapSize.Y - halfScreen.Y );
 
 			return Vector2.Clamp( position, halfScreen, cameraMax );
 		}
